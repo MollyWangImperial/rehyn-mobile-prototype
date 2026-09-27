@@ -6,6 +6,9 @@ services:
     buildCommand: npm ci && npm run build:render
     staticPublishPath: dist/client
     autoDeployTrigger: off
+    envVars:
+      - key: SKIP_INSTALL_DEPS
+        value: "true"
     routes:
       - type: rewrite
         source: /*
