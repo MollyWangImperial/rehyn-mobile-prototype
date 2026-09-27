@@ -180,7 +180,14 @@ function Rehyn() {
   return <div className="rehyn-stage"><div className="rehyn-device"><div className="rehyn-screen">
     <div className="rehyn-island" aria-hidden="true" /><div className="rehyn-status" aria-hidden="true"><span>9:41</span><span className="rehyn-status-icons">●●● <span className="rehyn-battery" /></span></div>
     <main className="rehyn-scroll" ref={scrollRef}>
-      <header className="flex items-start justify-between gap-2"><div><p className="rehyn-eyebrow">{header[0]}</p><h1 className="rehyn-title">{header[1]}</h1></div>{page === "home" && <div className="rehyn-home-actions"><span className="shrink-0 rounded-md bg-card px-2 py-2 text-xs font-bold text-muted-foreground">Sun 27</span><Button ref={settingsTriggerRef} variant="ghost" className="rehyn-settings-trigger" aria-label="Account and settings" aria-haspopup="dialog" onClick={() => setSettingsOpen(true)}><Settings aria-hidden="true" /><span>Settings</span></Button></div>}</header>
+      {page === "home" ? <header className="rehyn-home-header">
+        <div className="rehyn-home-topline">
+          <p className="rehyn-eyebrow">{header[0]}</p>
+          <span className="rehyn-home-date">Sun 27</span>
+          <Button ref={settingsTriggerRef} variant="ghost" size="icon" className="rehyn-settings-trigger" aria-label="Account and settings" title="Account and settings" aria-haspopup="dialog" onClick={() => setSettingsOpen(true)}><Settings aria-hidden="true" /></Button>
+        </div>
+        <h1 className="rehyn-title">Good afternoon,<br />Molly.</h1>
+      </header> : <header><p className="rehyn-eyebrow">{header[0]}</p><h1 className="rehyn-title">{header[1]}</h1></header>}
       {page === "home" && <div className="rehyn-panel">
         <section className="rehyn-hero"><span className="rehyn-hero-art" aria-hidden="true" /><p className="rehyn-eyebrow">Next step</p><h2 className="rehyn-subtitle mt-3 max-w-[210px]">A gentle start<br />for today.</h2><p className="rehyn-copy mt-3 max-w-[250px]">Tell us how you are feeling, and we will find a comfortable next step.</p><Button className="rehyn-action mt-5 w-full" onClick={() => go("journey", "journal")}>Begin check-in <ArrowRight /></Button><p className="mt-3 text-center text-xs font-semibold text-muted-foreground">About 1 minute</p></section>
         <section className="rehyn-section"><SectionTitle eyebrow="Step 1 of 3" title="Your progress" action={<Button variant="link" className="h-11 px-0 text-primary" onClick={() => go("journey", "progress")}>See details <ChevronRight /></Button>} /><div className="rehyn-progress-row">{progress.map(item => <Button key={item.label} variant="ghost" className="rehyn-progress-item rehyn-glass rehyn-tap-feedback h-auto flex-col items-start justify-start whitespace-normal" onClick={() => go("journey", "progress")}><item.icon className="!size-5 text-primary" /><strong>{item.label}</strong><div className="w-full"><div className="rehyn-meter"><i style={{ width: `${item.score}%` }} /></div><small className="mt-2 block">{item.status}</small></div></Button>)}</div></section>
