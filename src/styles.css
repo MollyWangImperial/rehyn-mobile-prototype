@@ -27,6 +27,11 @@
   --color-warm-foreground: var(--warm-foreground);
   --color-stage: var(--stage);
   --color-device: var(--device);
+  --color-medal-rust: var(--medal-rust);
+  --color-medal-green: var(--medal-green);
+  --color-medal-gold: var(--medal-gold);
+  --color-medal-clay: var(--medal-clay);
+  --color-medal-pending: var(--medal-pending);
   --font-sans: "DM Sans", sans-serif;
   --font-display: "Fraunces", serif;
 }
@@ -50,6 +55,12 @@
   --stage: oklch(0.985 0.002 90);
   --device: oklch(0.16 0.012 320);
   --device-rim: oklch(0.41 0.022 320);
+  --medal-rust: oklch(0.49 0.13 42);
+  --medal-green: oklch(0.39 0.078 158);
+  --medal-gold: oklch(0.46 0.10 90);
+  --medal-clay: oklch(0.55 0.10 53);
+  --medal-pending: oklch(0.69 0.014 85);
+  --medal-paper: oklch(0.96 0.013 70);
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
@@ -88,6 +99,38 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px
 .rehyn-section-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
 .rehyn-section-head h2 { font-family: var(--font-display); font-size: 21px; line-height: 1.15; font-weight: 600; margin: 4px 0 0; }
 .rehyn-glass { background: color-mix(in oklab, var(--card) 78%, transparent); backdrop-filter: blur(15px); border: 1px solid color-mix(in oklab, var(--card) 85%, var(--border)); box-shadow: 0 8px 24px color-mix(in oklab, var(--foreground) 5%, transparent); border-radius: 8px; }
+/* Keep card labels readable while their translucent surface becomes more solid. */
+button.rehyn-glass { color: var(--foreground); transition: background-color .18s ease, box-shadow .18s ease; }
+button.rehyn-glass:is(:hover, :focus-visible) { background: color-mix(in oklab, var(--card) 94%, transparent); }
+button.rehyn-glass:active { background: var(--card); }
+/* Fade the Home controls gently without hiding their labels or changing their color. */
+button.rehyn-tap-feedback { opacity: 1; transition: opacity .16s ease; }
+button.rehyn-tap-feedback.rehyn-glass:is(:hover, :focus-visible, :active) { background: color-mix(in oklab, var(--card) 78%, transparent); color: var(--foreground); }
+button.rehyn-tap-feedback.rehyn-alira-cta:is(:hover, :focus-visible, :active) { background: var(--secondary); color: var(--foreground); }
+button.rehyn-tap-feedback:is(:hover, :focus-visible) { opacity: .82; }
+button.rehyn-tap-feedback:active { opacity: .7; }
+.rehyn-alira-avatar { display: inline-grid; place-items: center; flex-shrink: 0; width: 24px; height: 24px; aspect-ratio: 1; border: 2px solid #e4eae7; border-radius: 50%; background: #315f4e; color: #fffdf5; }
+.rehyn-screen .rehyn-alira-avatar > svg { width: 48%; height: 27%; }
+.rehyn-nav .rehyn-alira-avatar { width: 24px; height: 24px; }
+.rehyn-alira-avatar.rehyn-alira-intro-avatar { width: 64px; height: 64px; border-width: 4px; }
+.rehyn-alira-card { container-type: inline-size; padding: 24px 20px; border-radius: 16px; background: color-mix(in oklab, var(--card) 88%, transparent); }
+.rehyn-alira-heading { display: flex; align-items: center; gap: 12px; }
+.rehyn-alira-heading h2 { flex: 1; min-width: 0; margin: 0; font-family: var(--font-display); font-size: clamp(21px, 10.5cqi, 30px); font-weight: 600; line-height: 1.14; letter-spacing: -.025em; }
+.rehyn-alira-card .rehyn-alira-card-logo { width: clamp(43px, 22cqi, 64px); height: auto; border-width: 3px; }
+.rehyn-alira-card > .rehyn-copy { margin-top: 15px; font-size: clamp(14px, 6.6cqi, 17px); line-height: 1.5; }
+.rehyn-alira-card .rehyn-alira-cta { display: flex; width: 100%; min-height: 54px; height: auto; justify-content: space-between; gap: 10px; margin-top: 20px; padding: 14px 17px; border-radius: 11px; font-size: clamp(15px, 7cqi, 19px); white-space: normal; text-align: left; }
+.rehyn-optional-activity { container-type: inline-size; }
+.rehyn-optional-activity > .rehyn-eyebrow { margin: 0 0 12px; color: var(--muted-foreground); }
+.rehyn-activity-card { display: grid; width: 100%; height: auto; justify-content: stretch; gap: 17px; padding: clamp(14px, 5cqi, 20px); border-radius: 14px; white-space: normal; text-align: left; }
+.rehyn-activity-header { display: grid; grid-template-columns: clamp(48px, 23cqi, 70px) minmax(0, 1fr) 14px; align-items: center; gap: clamp(8px, 3.5cqi, 12px); }
+.rehyn-activity-art { display: grid; place-items: center; width: 100%; aspect-ratio: 1; border-radius: 12px; background: var(--sage); color: var(--primary); }
+.rehyn-activity-art svg { width: 65%; height: 65%; }
+.rehyn-activity-info { min-width: 0; }
+.rehyn-activity-info strong { display: block; font-family: var(--font-display); font-size: clamp(18px, 7.8cqi, 26px); font-weight: 600; line-height: 1.2; letter-spacing: -.025em; }
+.rehyn-activity-duration { display: flex; align-items: center; gap: 6px; margin-top: 7px; font-size: 14px; font-weight: 500; color: var(--muted-foreground); }
+.rehyn-activity-duration svg { width: 16px; height: 16px; }
+.rehyn-activity-header > .rehyn-activity-chevron { width: 14px; height: 18px; color: var(--foreground); }
+.rehyn-activity-description { display: block; font-size: 14px; font-weight: 400; line-height: 1.5; color: var(--muted-foreground); }
 .rehyn-action { min-height: 50px; font-size: 15px; font-weight: 800; border-radius: 8px; }
 .rehyn-hero { position: relative; overflow: hidden; padding: 23px; min-height: 244px; margin-top: 22px; background: var(--sage); border-radius: 8px; }
 .rehyn-hero > * { position: relative; z-index: 1; }
@@ -114,10 +157,35 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px
 .rehyn-chart path { fill: none; stroke: var(--primary); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
 .rehyn-chart line { stroke: var(--border); }
 .rehyn-chart circle { fill: var(--primary); stroke: var(--card); stroke-width: 3; }
-.rehyn-mood-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; margin-top: 20px; }
-.rehyn-mood-grid button { min-width: 0; min-height: 70px; display: grid; align-content: center; justify-items: center; gap: 5px; padding: 5px 0; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; font-weight: 700; }
-.rehyn-mood-grid button.active { border-color: var(--primary); background: var(--sage); transform: translateY(-2px); }
-.rehyn-mood-grid span { font-size: 24px; line-height: 1; }
+.rehyn-journal-entry { container-type: inline-size; }
+.rehyn-journal-entry > h2 { margin: 0; font-family: var(--font-display); font-size: clamp(22px, 9cqi, 32px); font-weight: 600; line-height: 1.2; letter-spacing: -.03em; }
+.rehyn-mood-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin-top: 24px; }
+.rehyn-mood-grid button { min-width: 0; width: 100%; height: auto; min-height: 70px; display: grid; align-content: start; justify-items: center; gap: 3px; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--foreground); font-size: clamp(12px, 4.3cqi, 16px); font-weight: 400; }
+.rehyn-mood-face { position: relative; display: grid; place-items: center; width: clamp(40px, 17cqi, 62px); max-width: 100%; aspect-ratio: 1; border-radius: 50%; transition: background-color .18s ease; }
+.rehyn-mood-face > svg { width: 83%; height: 83%; }
+.rehyn-mood-grid button:is(:hover, :focus-visible) .rehyn-mood-face { background: color-mix(in oklab, var(--sage) 70%, transparent); }
+.rehyn-mood-grid button.active .rehyn-mood-face, .rehyn-mood-grid button:active .rehyn-mood-face { background: var(--sage); }
+.rehyn-mood-grid button.active .rehyn-mood-label { font-weight: 700; }
+.rehyn-mood-check { position: absolute; top: 0; right: -1px; display: grid; place-items: center; width: 33%; aspect-ratio: 1; border: 1px solid var(--background); border-radius: 50%; background: var(--primary); color: var(--primary-foreground); }
+.rehyn-mood-check > svg { width: 70%; height: 70%; }
+.rehyn-mood-label { line-height: 1.4; }
+.rehyn-journal-note { display: block; margin-top: 29px; font-size: 15px; font-weight: 700; }
+.rehyn-journal-note > span { font-weight: 400; color: var(--muted-foreground); }
+.rehyn-journal-entry .rehyn-journal-textarea { display: block; min-height: 108px; margin-top: 10px; padding: 13px; border-radius: 10px; background: #fff; font-size: 14px; font-weight: 400; line-height: 1.5; }
+.rehyn-journal-save { width: 100%; margin-top: 16px; border-radius: 11px; font-size: 17px; font-weight: 600; }
+.rehyn-mood-history { container-type: inline-size; padding-bottom: 22px; border-bottom: 1px solid var(--border); }
+.rehyn-mood-history > h2 { margin: 0; font-family: var(--font-display); font-size: clamp(20px, 8.6cqi, 27px); font-weight: 600; line-height: 1.2; letter-spacing: -.025em; }
+.rehyn-mood-timeline { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: clamp(3px, 1.7cqi, 6px); list-style: none; margin: 19px 0 0; padding: 0; }
+.rehyn-mood-timeline > li { min-width: 0; }
+.rehyn-history-dot { display: block; width: 100%; aspect-ratio: 1; border-radius: 50%; }
+.rehyn-mood-timeline [data-mood="Okay"] .rehyn-history-dot { background: #a39142; }
+.rehyn-mood-timeline [data-mood="Good"] .rehyn-history-dot { background: #59826a; }
+.rehyn-mood-timeline [data-mood="Great"] .rehyn-history-dot { background: #315d4c; }
+.rehyn-mood-timeline [data-mood="Low"] .rehyn-history-dot { background: #ba7047; }
+.rehyn-mood-timeline [data-mood="unrecorded"] .rehyn-history-dot { border: 1.5px dashed #bcb6aa; }
+.rehyn-mood-timeline [aria-current="date"] .rehyn-history-dot { border-color: #bd6138; }
+.rehyn-history-dates { display: flex; justify-content: space-between; align-items: start; gap: 12px; margin-top: 11px; font-size: 12px; font-weight: 700; line-height: 1.5; color: var(--muted-foreground); }
+.rehyn-history-today { color: var(--primary); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
 .rehyn-scroll [aria-label="Breathing duration"] { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .rehyn-scroll [aria-label="Breathing duration"] button { min-width: 0; width: 100%; padding-inline: 0; }
 .rehyn-scroll .grid { min-width: 0; }
@@ -140,10 +208,54 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px
 .rehyn-memory { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-top: 23px; }
 .rehyn-memory button { aspect-ratio: .82; border-radius: 8px; background: var(--sage); color: var(--primary); font-size: 27px; transition: transform .24s ease, background .24s ease; }
 .rehyn-memory button.revealed { transform: rotateY(180deg); background: var(--warm); color: var(--warm-foreground); }
+.rehyn-medals { padding-bottom: 8px; }
+.rehyn-medal-summary { margin-top: 24px; padding: 20px; border-radius: 8px; background: var(--sage); border: 1px solid var(--secondary); }
+.rehyn-medal-summary h2 { margin: 7px 0 14px; font: 600 21px/1.2 var(--font-display); }
+.rehyn-medal-summary h2 strong { font-size: 38px; line-height: 1; }
+.rehyn-medal-summary > p:last-child { margin: 12px 0 0; font-size: 12px; line-height: 1.4; color: var(--sage-foreground); }
+.rehyn-medal-track { display: block; width: 100%; height: 9px; overflow: hidden; border-radius: 20px; background: var(--medal-paper); }
+.rehyn-medal-track > span { display: block; height: 100%; border-radius: inherit; background: var(--primary); animation: rehyn-fill .7s ease-out both; }
+.rehyn-medal-group { --medal-tone: var(--medal-rust); margin-top: 28px; }
+.rehyn-medal-group.green, .rehyn-medal-detail.green { --medal-tone: var(--medal-green); }
+.rehyn-medal-group.gold, .rehyn-medal-detail.gold { --medal-tone: var(--medal-gold); }
+.rehyn-medal-group.clay, .rehyn-medal-detail.clay { --medal-tone: var(--medal-clay); }
+.rehyn-medal-detail.rust { --medal-tone: var(--medal-rust); }
+.rehyn-medal-group-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+.rehyn-medal-group-head h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 17px; font-weight: 800; }
+.rehyn-medal-dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--medal-tone); }
+.rehyn-medal-group-head > span { flex: none; font-size: 12px; font-weight: 700; color: var(--muted-foreground); }
+.rehyn-medal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.rehyn-medal-tile { min-width: 0; height: 154px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 0; padding: 14px 8px 12px; white-space: normal; text-align: center; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--foreground); box-shadow: 0 7px 16px color-mix(in oklab, var(--foreground) 5%, transparent); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.rehyn-medal-tile:hover { background: var(--card); color: var(--foreground); border-color: var(--medal-tone); box-shadow: 0 9px 20px color-mix(in oklab, var(--medal-tone) 12%, transparent); transform: translateY(-2px); }
+.rehyn-medal-tile:active { transform: scale(.97); }
+.rehyn-medal-tile strong { display: block; width: 100%; margin-top: 9px; font-size: 12px; line-height: 1.2; overflow-wrap: anywhere; }
+.rehyn-medal-earned, .rehyn-medal-progress { display: block; margin-top: auto; font-size: 11px; line-height: 1.2; font-weight: 700; color: var(--sage-foreground); }
+.rehyn-medal-progress { margin-top: 5px; color: var(--muted-foreground); }
+.rehyn-medal-track.small { height: 5px; flex-shrink: 0; margin-top: auto; background: var(--muted); }
+.rehyn-medal-track.small > span { background: var(--medal-tone); }
+.rehyn-medal-emblem { width: 54px; height: 54px; flex: none; display: grid; place-items: center; border-radius: 50%; color: var(--medal-tone); border: 5px solid var(--medal-tone); background: color-mix(in oklab, var(--medal-tone) 13%, var(--card)); box-shadow: inset 0 2px 5px color-mix(in oklab, var(--medal-tone) 10%, transparent); }
+.rehyn-medal-emblem.rust { --medal-tone: var(--medal-rust); }
+.rehyn-medal-emblem.green { --medal-tone: var(--medal-green); }
+.rehyn-medal-emblem.gold { --medal-tone: var(--medal-gold); }
+.rehyn-medal-emblem.clay { --medal-tone: var(--medal-clay); }
+.rehyn-medal-emblem.pending { --medal-tone: var(--medal-pending); background: var(--medal-paper); }
+.rehyn-medal-emblem svg { width: 25px; height: 25px; stroke-width: 2.3; }
+.rehyn-medal-emblem.large { width: 104px; height: 104px; border-width: 8px; margin: 2px auto 17px; }
+.rehyn-medal-emblem.large svg { width: 49px; height: 49px; stroke-width: 1.7; }
+.rehyn-medal-scrim { z-index: 25; }
+.rehyn-medal-detail { max-height: calc(100% - 53px); padding: 12px 22px 40px; text-align: center; }
+.rehyn-medal-detail > button:first-child { display: flex; margin-left: auto; margin-bottom: 1px; }
+.rehyn-medal-detail .rehyn-eyebrow { color: var(--medal-tone); }
+.rehyn-medal-detail h2 { margin: 8px 0 0; font: 600 27px/1.15 var(--font-display); }
+.rehyn-medal-detail-copy { margin: 10px 0 18px; font-size: 15px; line-height: 1.45; color: var(--muted-foreground); }
+.rehyn-medal-detail .rehyn-medal-track > span { background: var(--medal-tone); }
+.rehyn-medal-detail-progress { margin: 8px 0 0; font-size: 13px; font-weight: 800; }
+.rehyn-medal-detail .rehyn-action { white-space: normal; height: auto; padding-block: 12px; line-height: 1.25; }
+@container (max-width: 300px) { .rehyn-medal-tile { height: 145px; padding-inline: 5px; } .rehyn-medal-tile strong { font-size: 11px; } .rehyn-medal-earned, .rehyn-medal-progress { font-size: 10px; } .rehyn-medal-detail { padding: 8px 18px 20px; } .rehyn-medal-emblem.large { width: 76px; height: 76px; border-width: 6px; margin-bottom: 10px; } .rehyn-medal-emblem.large svg { width: 37px; height: 37px; } .rehyn-medal-detail h2 { font-size: 23px; } .rehyn-medal-detail-copy { margin: 8px 0 12px; font-size: 14px; } .rehyn-medal-detail .rehyn-action { margin-top: 12px; padding-block: 8px; } }
 @keyframes rehyn-breathe { 50% { transform: scale(1.2); opacity: .6; } }
 @keyframes rehyn-arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes rehyn-fill { from { width: 0; } }
 @keyframes rehyn-sheet { from { transform: translateY(30px); opacity: .5; } to { transform: translateY(0); opacity: 1; } }
 @media (max-width: 480px) { .rehyn-stage { padding: 16px; } .rehyn-device { width: min(406px, calc((100svh - 64px) * .493), calc(100vw - 32px)); } .rehyn-scroll { padding-left: 19px; padding-right: 19px; } .rehyn-progress-row { margin-left: -19px; margin-right: -19px; padding-left: 19px; padding-right: 19px; } }
-@container (max-width: 300px) { .rehyn-scroll { padding-left: 17px; padding-right: 17px; } .rehyn-title { font-size: 26px; } .rehyn-hero { padding: 18px; } .rehyn-subtitle { font-size: 21px; } .rehyn-copy { font-size: 14px; } .rehyn-nav { padding-inline: 8px; } .rehyn-nav button { font-size: 10px; } .rehyn-progress-row { margin-left: -17px; margin-right: -17px; padding-left: 17px; padding-right: 17px; } .rehyn-tabs button { font-size: 12px; } .rehyn-mood-grid { gap: 2px; } .rehyn-mood-grid button { font-size: 10px; } }
+@container (max-width: 300px) { .rehyn-scroll { padding-left: 17px; padding-right: 17px; } .rehyn-title { font-size: 26px; } .rehyn-hero { padding: 18px; } .rehyn-subtitle { font-size: 21px; } .rehyn-copy { font-size: 14px; } .rehyn-nav { padding-inline: 8px; } .rehyn-nav button { font-size: 10px; } .rehyn-progress-row { margin-left: -17px; margin-right: -17px; padding-left: 17px; padding-right: 17px; } .rehyn-tabs button { font-size: 12px; } }
 @media (prefers-reduced-motion: reduce) { .rehyn-stage *, .rehyn-stage *::before, .rehyn-stage *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }

@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: rehyn-phone-prototype
+    runtime: static
+    branch: codex/render-phone-prototype
+    buildCommand: npm ci && npm run build:render
+    staticPublishPath: dist/client
+    autoDeployTrigger: off
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
