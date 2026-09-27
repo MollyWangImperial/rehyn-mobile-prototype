@@ -1,13 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+  ArrowRight,
   ArrowLeft,
   ArrowUpRight,
   Award,
   BookHeart,
   Bot,
+  CalendarCheck,
   ChevronRight,
   CircleHelp,
+  CircleAlert,
+  Check,
+  Hand,
   Headphones,
   Heart,
   Home as HomeIcon,
@@ -27,13 +32,14 @@ import {
   X,
 } from "lucide-react";
 
-type Page = "journey" | "alira" | "time";
+type Page = "home" | "journey" | "alira" | "time";
 type JourneyTab = "progress" | "journal" | "medals";
 type Mood = { icon: string; label: string; color: string; note: string };
 type Message = { id: number; role: "alira" | "molly"; text: string; tone?: "warm" | "concern" };
 type MemoryCard = { id: number; symbol: string; matched: boolean };
 
 const CALM_IMAGE = "/manus-storage/rehyn-calm-breathing_599cdb55.jpg";
+const HOME_IMAGE = "/manus-storage/rehyn-home-growth_0e200fce.jpg";
 
 const moods: Mood[] = [
   { icon: "☁", label: "Tough", color: "#7D8790", note: "A hard day is still a day you showed up." },
@@ -95,6 +101,7 @@ function IconButton({ label, children, onClick, active = false }: { label: strin
 
 function AppHeader({ page, onBack }: { page: Page; onBack?: () => void }) {
   const copy = {
+    home: { eyebrow: "Your recovery space", title: "Good afternoon, Molly." },
     journey: { eyebrow: "Your recovery, at your pace", title: "Your Journey" },
     alira: { eyebrow: "Your thoughtful space", title: "Alira" },
     time: { eyebrow: "A little room for you", title: "My Time" },
@@ -109,6 +116,66 @@ function AppHeader({ page, onBack }: { page: Page; onBack?: () => void }) {
       {onBack ? <IconButton label="Go back" onClick={onBack}><ArrowLeft size={20} /></IconButton> : <div className="day-chip"><span className="day-dot" />Sun 27</div>}
     </header>
   );
+}
+
+function HomePage({ openJourney, openAlira, toast }: { openJourney: () => void; openAlira: () => void; toast: (text: string) => void }) {
+  const [activityOpen, setActivityOpen] = useState(false);
+  const [safetyOpen, setSafetyOpen] = useState(false);
+  const [stretchStep, setStretchStep] = useState(0);
+  const stretchSteps = [
+    { title: "Rest your arm", copy: "Place your forearm on a table or cushion. Let your shoulder feel heavy." },
+    { title: "Open your hand", copy: "Slowly lengthen your fingers. Only move as far as feels comfortable." },
+    { title: "Pause and soften", copy: "Hold for one relaxed breath, then let your hand rest again." },
+  ];
+  const currentStep = stretchSteps[stretchStep];
+
+  return <>
+    <AppHeader page="home" />
+    <section className="home-hero-card">
+      <div className="home-hero-copy">
+        <p className="overline">Next step</p>
+        <h2>A gentle start<br />for today.</h2>
+        <p>Tell us how you are feeling, and we will find a comfortable next step.</p>
+        <button type="button" className="primary-button" onClick={openJourney}>Begin check-in <ArrowRight size={17} /></button>
+        <span className="minute-note"><CalendarCheck size={14} /> About 1 minute</span>
+      </div>
+      <div className="home-growth-art" style={HOME_IMAGE ? { backgroundImage: `url(${HOME_IMAGE})` } : undefined} aria-hidden="true"><i /><i /><i /></div>
+      <div className="home-step-line"><span /><span /><span className="active" /></div>
+    </section>
+
+    <section className="home-progress-section">
+      <div className="section-heading compact"><div><p className="overline">Step 1 of 3</p><h2>Your progress</h2></div><button type="button" className="text-button" onClick={openJourney}>See details <ChevronRight size={16} /></button></div>
+      <div className="home-progress-rail">
+        <button type="button" onClick={openJourney}><span className="home-stat-icon"><ArrowUpRight size={19} /></span><div><small><i /> Building</small><strong>Reaching</strong><em><b style={{ width: "62%" }} /></em></div></button>
+        <button type="button" onClick={openJourney}><span className="home-stat-icon"><Hand size={18} /></span><div><small><i /> Building</small><strong>Hand control</strong><em><b style={{ width: "56%" }} /></em></div></button>
+        <button type="button" onClick={openJourney}><span className="home-stat-icon"><Waves size={18} /></span><div><small><i /> Steady</small><strong>Moving about</strong><em><b style={{ width: "72%" }} /></em></div></button>
+      </div>
+    </section>
+
+    <section className="home-alira-card">
+      <div className="home-alira-mark"><Bot size={21} /></div>
+      <div><p className="overline">Alira <span>Available to help</span></p><h2>Questions about your plan?</h2><p>I can help make today feel clearer.</p></div>
+      <button type="button" onClick={openAlira}>Talk with Alira <ArrowRight size={17} /></button>
+      <small><LockKeyhole size={13} /> Your conversations stay private</small>
+    </section>
+
+    <section className="home-week-section">
+      <div className="section-heading compact"><div><p className="overline">This week</p><h2>One day at a time.</h2></div></div>
+      <div className="week-row" aria-label="Weekly check-in progress">
+        {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => <span key={`${day}-${index}`} className={index < 3 ? "done" : index === 3 ? "today" : ""}><small>{day}</small><i>{index < 3 ? <Check size={13} /> : index === 3 ? "27" : index + 24}</i></span>)}
+      </div>
+    </section>
+
+    <button type="button" className="activity-card" onClick={() => { setStretchStep(0); setActivityOpen(true); }}>
+      <span className="activity-icon"><Hand size={22} /></span><div><p className="overline">Optional activity · 5 min</p><h2>Hand stretch</h2><p>Try a slow, comfortable hand stretch.</p></div><ChevronRight size={20} />
+    </button>
+    <button type="button" className="safety-link" onClick={() => setSafetyOpen(true)}><CircleAlert size={17} /> Worried about warning signs? <ChevronRight size={17} /></button>
+
+    <AnimatePresence>
+      {activityOpen && <motion.div className="activity-overlay" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 18 }}><button type="button" className="close-breath" onClick={() => setActivityOpen(false)} aria-label="Close hand stretch"><X size={22} /></button><div className="activity-overlay-content"><p className="overline">Optional activity · step {stretchStep + 1} of 3</p><div className="hand-orb"><Hand size={55} /></div><h2>{currentStep.title}</h2><p>{currentStep.copy}</p><div className="activity-dots" aria-label={`Step ${stretchStep + 1} of 3`}><i className={stretchStep >= 0 ? "active" : ""} /><i className={stretchStep >= 1 ? "active" : ""} /><i className={stretchStep >= 2 ? "active" : ""} /></div><button type="button" className="primary-button" onClick={() => { if (stretchStep === 2) { setActivityOpen(false); toast("Lovely work — you can come back anytime"); } else setStretchStep((step) => step + 1); }}>{stretchStep === 2 ? "Finish gently" : "Next step"} <ArrowRight size={17} /></button><button type="button" className="text-button" onClick={() => setActivityOpen(false)}>Leave for now</button></div></motion.div>}
+      {safetyOpen && <motion.div className="sheet-backdrop safety-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSafetyOpen(false)}><motion.article className="bottom-sheet safety-sheet" initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }} transition={{ type: "spring", stiffness: 300, damping: 30 }} onClick={(event) => event.stopPropagation()}><div className="sheet-handle" /><div className="safety-symbol"><CircleAlert size={24} /></div><p className="overline">If something feels wrong</p><h2>Act quickly if you notice sudden changes.</h2><p>If you think you or someone else may be having a stroke, call <strong>999</strong> now. Do not wait for an in-app reply.</p><button type="button" className="primary-button full" onClick={() => setSafetyOpen(false)}>I understand</button></motion.article></motion.div>}
+    </AnimatePresence>
+  </>;
 }
 
 function ProgressView({ selectedPoint, setSelectedPoint, setJourneyTab }: { selectedPoint: number; setSelectedPoint: (value: number) => void; setJourneyTab: (value: JourneyTab) => void }) {
@@ -353,11 +420,12 @@ function MyTimePage({ toast }: { toast: (text: string) => void }) {
 }
 
 export default function Home() {
-  const [page, setPage] = useState<Page>("journey");
+  const [page, setPage] = useState<Page>("home");
   const [journeyTab, setJourneyTab] = useState<JourneyTab>("progress");
   const [toastMessage, setToastMessage] = useState("");
-  const pageContent = useMemo(() => ({ journey: <JourneyPage journeyTab={journeyTab} setJourneyTab={setJourneyTab} toast={setToastMessage} />, alira: <AliraPage toast={setToastMessage} />, time: <MyTimePage toast={setToastMessage} /> }), [journeyTab]);
+  const pageContent = useMemo(() => ({ home: <HomePage openJourney={() => { setJourneyTab("journal"); setPage("journey"); }} openAlira={() => setPage("alira")} toast={setToastMessage} />, journey: <JourneyPage journeyTab={journeyTab} setJourneyTab={setJourneyTab} toast={setToastMessage} />, alira: <AliraPage toast={setToastMessage} />, time: <MyTimePage toast={setToastMessage} /> }), [journeyTab]);
+  useEffect(() => { document.querySelector(".rehyn-app")?.scrollTo({ top: 0, behavior: "auto" }); }, [page]);
   useEffect(() => { if (!toastMessage) return; const timer = window.setTimeout(() => setToastMessage(""), 2600); return () => window.clearTimeout(timer); }, [toastMessage]);
 
-  return <main className="rehyn-app"><div className="app-top-line" /><AnimatePresence mode="wait"><motion.div key={page} className="page-content" initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -14 }} transition={{ duration: 0.24, ease: "easeOut" }}>{pageContent[page]}</motion.div></AnimatePresence><nav className="bottom-nav" aria-label="Main navigation">{[{ id: "journey" as Page, label: "Journey", icon: HomeIcon }, { id: "alira" as Page, label: "Alira", icon: Bot }, { id: "time" as Page, label: "My Time", icon: Heart }].map((item) => { const ItemIcon = item.icon; return <button type="button" key={item.id} aria-current={page === item.id ? "page" : undefined} className={page === item.id ? "active" : ""} onClick={() => setPage(item.id)}><ItemIcon size={21} strokeWidth={page === item.id ? 2.4 : 1.9} /><span>{item.label}</span></button>; })}</nav><AnimatePresence>{toastMessage && <motion.div className="app-toast" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 12 }}><Sparkles size={16} /> {toastMessage}</motion.div>}</AnimatePresence></main>;
+  return <div className="prototype-stage"><div className="iphone-frame"><div className="iphone-screen"><div className="iphone-island" aria-hidden="true"><i /></div><main className="rehyn-app"><div className="app-top-line" /><AnimatePresence mode="wait"><motion.div key={page} className="page-content" initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -14 }} transition={{ duration: 0.24, ease: "easeOut" }}>{pageContent[page]}</motion.div></AnimatePresence><nav className="bottom-nav" aria-label="Main navigation">{[{ id: "home" as Page, label: "Home", icon: HomeIcon }, { id: "journey" as Page, label: "Journey", icon: BookHeart }, { id: "alira" as Page, label: "Alira", icon: Bot }, { id: "time" as Page, label: "My Time", icon: Heart }].map((item) => { const ItemIcon = item.icon; return <button type="button" key={item.id} aria-current={page === item.id ? "page" : undefined} className={page === item.id ? "active" : ""} onClick={() => setPage(item.id)}><ItemIcon size={21} strokeWidth={page === item.id ? 2.4 : 1.9} /><span>{item.label}</span></button>; })}</nav><AnimatePresence>{toastMessage && <motion.div className="app-toast" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 12 }}><Sparkles size={16} /> {toastMessage}</motion.div>}</AnimatePresence></main><div className="iphone-home-indicator" aria-hidden="true" /></div></div></div>;
 }
