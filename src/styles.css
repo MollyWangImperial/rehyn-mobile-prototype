@@ -93,6 +93,37 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px
 .rehyn-nav svg { width: 21px; height: 21px; }
 .rehyn-eyebrow { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: var(--primary); }
 .rehyn-title { font-family: var(--font-display); font-size: 31px; font-weight: 600; line-height: 1.1; margin: 8px 0 0; }
+.rehyn-home-actions { display: flex; flex-direction: column; align-items: center; gap: 7px; flex-shrink: 0; padding-top: 4px; }
+.rehyn-settings-trigger { display: flex; flex-direction: column; gap: 3px; min-width: 52px; height: 49px; padding: 5px 4px; border-radius: 10px; color: var(--primary); font-size: 10px; font-weight: 700; }
+.rehyn-settings-trigger svg { width: 21px; height: 21px; }
+.rehyn-settings { position: absolute; z-index: 19; inset: 45px 0 0; display: flex; flex-direction: column; min-height: 0; background: var(--background); color: var(--foreground); overflow: hidden; animation: rehyn-arrive .2s ease-out both; }
+.rehyn-settings-toolbar { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 8px; padding: 8px 17px 0; }
+.rehyn-settings-back { min-height: 44px; padding-inline: 0; color: var(--primary); }
+.rehyn-settings-close { width: 44px; height: 44px; border-radius: 50%; }
+.rehyn-settings-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 10px 20px 36px; }
+.rehyn-settings-title { margin: 0; font: 600 27px/1.15 var(--font-display); letter-spacing: -.025em; overflow-wrap: break-word; }
+.rehyn-settings-title:focus { outline: none; }
+.rehyn-settings-description { margin: 10px 0 0; font-size: 14px; line-height: 1.5; color: var(--muted-foreground); }
+.rehyn-settings-profile { display: flex; align-items: center; gap: 12px; padding: 12px 14px; margin-top: 20px; background: var(--sage); border-radius: 14px; }
+.rehyn-settings-avatar { width: 44px; height: 44px; flex: none; display: grid; place-items: center; border-radius: 50%; background: var(--card); color: var(--primary); }
+.rehyn-settings-profile strong { display: block; font-size: 17px; }
+.rehyn-settings-profile div > span { display: block; margin-top: 3px; font-size: 12px; line-height: 1.5; color: var(--muted-foreground); }
+.rehyn-settings-links { margin-top: 22px; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--card); }
+.rehyn-settings-row { width: 100%; height: auto; min-height: 78px; display: grid; grid-template-columns: 20px minmax(0, 1fr) 14px; gap: 10px; padding: 15px 12px; border-radius: 0; white-space: normal; text-align: left; }
+.rehyn-settings-row + .rehyn-settings-row { border-top: 1px solid var(--border); }
+.rehyn-settings-row > svg { color: var(--primary); }
+.rehyn-settings-row strong { display: block; font-size: 14px; line-height: 1.4; }
+.rehyn-settings-row small { display: block; margin-top: 4px; font-size: 12px; font-weight: 400; line-height: 1.45; color: var(--muted-foreground); }
+.rehyn-settings-footnote { margin: 20px 0 0; font-size: 12px; line-height: 1.6; color: var(--muted-foreground); }
+.rehyn-settings-copy { display: grid; gap: 22px; margin-top: 24px; }
+.rehyn-settings-copy h3 { margin: 0; font-size: 16px; line-height: 1.4; font-weight: 700; }
+.rehyn-settings-copy p { margin: 7px 0 0; font-size: 14px; line-height: 1.65; color: var(--muted-foreground); }
+.rehyn-settings-copy a { display: flex; align-items: center; gap: 7px; width: fit-content; min-height: 44px; color: var(--primary); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
+.rehyn-settings-copy a svg { width: 14px; height: 14px; flex: none; }
+.rehyn-settings-copy .rehyn-settings-notice { margin: 0; padding: 15px; border-radius: 12px; background: var(--sage); color: var(--sage-foreground); }
+.rehyn-settings-reset { width: 100%; white-space: normal; }
+.rehyn-settings-confirm { padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); }
+.rehyn-settings-confirm .rehyn-action { min-height: 48px; height: auto; white-space: normal; margin-top: 12px; }
 .rehyn-subtitle { font-family: var(--font-display); font-size: 23px; font-weight: 600; line-height: 1.14; }
 .rehyn-copy { font-size: 15px; line-height: 1.5; color: var(--muted-foreground); }
 .rehyn-section { margin-top: 29px; }
