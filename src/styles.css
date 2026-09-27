@@ -27,6 +27,11 @@
   --color-warm-foreground: var(--warm-foreground);
   --color-stage: var(--stage);
   --color-device: var(--device);
+  --color-medal-rust: var(--medal-rust);
+  --color-medal-green: var(--medal-green);
+  --color-medal-gold: var(--medal-gold);
+  --color-medal-clay: var(--medal-clay);
+  --color-medal-pending: var(--medal-pending);
   --font-sans: "DM Sans", sans-serif;
   --font-display: "Fraunces", serif;
 }
@@ -50,6 +55,12 @@
   --stage: oklch(0.985 0.002 90);
   --device: oklch(0.16 0.012 320);
   --device-rim: oklch(0.41 0.022 320);
+  --medal-rust: oklch(0.49 0.13 42);
+  --medal-green: oklch(0.39 0.078 158);
+  --medal-gold: oklch(0.46 0.10 90);
+  --medal-clay: oklch(0.55 0.10 53);
+  --medal-pending: oklch(0.69 0.014 85);
+  --medal-paper: oklch(0.96 0.013 70);
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; min-height: 100%; }
@@ -140,6 +151,50 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px
 .rehyn-memory { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-top: 23px; }
 .rehyn-memory button { aspect-ratio: .82; border-radius: 8px; background: var(--sage); color: var(--primary); font-size: 27px; transition: transform .24s ease, background .24s ease; }
 .rehyn-memory button.revealed { transform: rotateY(180deg); background: var(--warm); color: var(--warm-foreground); }
+.rehyn-medals { padding-bottom: 8px; }
+.rehyn-medal-summary { margin-top: 24px; padding: 20px; border-radius: 8px; background: var(--sage); border: 1px solid var(--secondary); }
+.rehyn-medal-summary h2 { margin: 7px 0 14px; font: 600 21px/1.2 var(--font-display); }
+.rehyn-medal-summary h2 strong { font-size: 38px; line-height: 1; }
+.rehyn-medal-summary > p:last-child { margin: 12px 0 0; font-size: 12px; line-height: 1.4; color: var(--sage-foreground); }
+.rehyn-medal-track { display: block; width: 100%; height: 9px; overflow: hidden; border-radius: 20px; background: var(--medal-paper); }
+.rehyn-medal-track > span { display: block; height: 100%; border-radius: inherit; background: var(--primary); animation: rehyn-fill .7s ease-out both; }
+.rehyn-medal-group { --medal-tone: var(--medal-rust); margin-top: 28px; }
+.rehyn-medal-group.green, .rehyn-medal-detail.green { --medal-tone: var(--medal-green); }
+.rehyn-medal-group.gold, .rehyn-medal-detail.gold { --medal-tone: var(--medal-gold); }
+.rehyn-medal-group.clay, .rehyn-medal-detail.clay { --medal-tone: var(--medal-clay); }
+.rehyn-medal-detail.rust { --medal-tone: var(--medal-rust); }
+.rehyn-medal-group-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 12px; }
+.rehyn-medal-group-head h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 17px; font-weight: 800; }
+.rehyn-medal-dot { width: 8px; height: 8px; flex: none; border-radius: 50%; background: var(--medal-tone); }
+.rehyn-medal-group-head > span { flex: none; font-size: 12px; font-weight: 700; color: var(--muted-foreground); }
+.rehyn-medal-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.rehyn-medal-tile { min-width: 0; height: 154px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 14px 8px 12px; white-space: normal; text-align: center; border: 1px solid var(--border); border-radius: 8px; background: var(--card); color: var(--foreground); box-shadow: 0 7px 16px color-mix(in oklab, var(--foreground) 5%, transparent); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.rehyn-medal-tile:hover { background: var(--card); color: var(--foreground); border-color: var(--medal-tone); box-shadow: 0 9px 20px color-mix(in oklab, var(--medal-tone) 12%, transparent); transform: translateY(-2px); }
+.rehyn-medal-tile:active { transform: scale(.97); }
+.rehyn-medal-tile strong { display: block; width: 100%; margin-top: 9px; font-size: 12px; line-height: 1.2; overflow-wrap: anywhere; }
+.rehyn-medal-earned, .rehyn-medal-progress { display: block; margin-top: auto; font-size: 11px; line-height: 1.2; font-weight: 700; color: var(--sage-foreground); }
+.rehyn-medal-progress { margin-top: 5px; color: var(--muted-foreground); }
+.rehyn-medal-track.small { height: 5px; margin-top: auto; background: var(--muted); }
+.rehyn-medal-track.small > span { background: var(--medal-tone); }
+.rehyn-medal-emblem { width: 54px; height: 54px; flex: none; display: grid; place-items: center; border-radius: 50%; color: var(--medal-tone); border: 5px solid var(--medal-tone); background: color-mix(in oklab, var(--medal-tone) 13%, var(--card)); box-shadow: inset 0 2px 5px color-mix(in oklab, var(--medal-tone) 10%, transparent); }
+.rehyn-medal-emblem.rust { --medal-tone: var(--medal-rust); }
+.rehyn-medal-emblem.green { --medal-tone: var(--medal-green); }
+.rehyn-medal-emblem.gold { --medal-tone: var(--medal-gold); }
+.rehyn-medal-emblem.clay { --medal-tone: var(--medal-clay); }
+.rehyn-medal-emblem.pending { --medal-tone: var(--medal-pending); background: var(--medal-paper); }
+.rehyn-medal-emblem svg { width: 25px; height: 25px; stroke-width: 2.3; }
+.rehyn-medal-emblem.large { width: 104px; height: 104px; border-width: 8px; margin: 2px auto 17px; }
+.rehyn-medal-emblem.large svg { width: 49px; height: 49px; stroke-width: 1.7; }
+.rehyn-medal-scrim { z-index: 25; }
+.rehyn-medal-detail { max-height: calc(100% - 53px); padding: 12px 22px 40px; text-align: center; }
+.rehyn-medal-detail > button:first-child { display: flex; margin-left: auto; margin-bottom: 1px; }
+.rehyn-medal-detail .rehyn-eyebrow { color: var(--medal-tone); }
+.rehyn-medal-detail h2 { margin: 8px 0 0; font: 600 27px/1.15 var(--font-display); }
+.rehyn-medal-detail-copy { margin: 10px 0 18px; font-size: 15px; line-height: 1.45; color: var(--muted-foreground); }
+.rehyn-medal-detail .rehyn-medal-track > span { background: var(--medal-tone); }
+.rehyn-medal-detail-progress { margin: 8px 0 0; font-size: 13px; font-weight: 800; }
+.rehyn-medal-detail .rehyn-action { white-space: normal; height: auto; padding-block: 12px; line-height: 1.25; }
+@container (max-width: 300px) { .rehyn-medal-tile { height: 145px; padding-inline: 5px; } .rehyn-medal-tile strong { font-size: 11px; } .rehyn-medal-earned, .rehyn-medal-progress { font-size: 10px; } .rehyn-medal-detail { padding: 8px 18px 20px; } .rehyn-medal-emblem.large { width: 76px; height: 76px; border-width: 6px; margin-bottom: 10px; } .rehyn-medal-emblem.large svg { width: 37px; height: 37px; } .rehyn-medal-detail h2 { font-size: 23px; } .rehyn-medal-detail-copy { margin: 8px 0 12px; font-size: 14px; } .rehyn-medal-detail .rehyn-action { margin-top: 12px; padding-block: 8px; } }
 @keyframes rehyn-breathe { 50% { transform: scale(1.2); opacity: .6; } }
 @keyframes rehyn-arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes rehyn-fill { from { width: 0; } }
