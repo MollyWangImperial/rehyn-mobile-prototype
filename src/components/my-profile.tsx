@@ -5,6 +5,18 @@ import { LEGAL_VERSION, LEGAL_EFFECTIVE_DATE, TERMS_INTRO, TERMS_SECTIONS, PRIVA
 import { DATA_SECTIONS } from "@/content/data-permissions";
 
 export type Profile = { name: string; email: string; dateOfBirth: string };
+type BirthDate = { day: string; month: string; year: string };
+const birthDateParts = (value: string): BirthDate => {
+  const [year = "", month = "", day = ""] = value.split("-");
+  return { day, month, year };
+};
+function birthDateValue({ day, month, year }: BirthDate): string | null {
+  if (!day && !month && !year) return "";
+  if (!/^\d{1,2}$/.test(day) || !/^\d{1,2}$/.test(month) || !/^\d{4}$/.test(year) || Number(year) < 1000) return null;
+  const date = new Date(Number(year), Number(month) - 1, Number(day));
+  if (date.getFullYear() !== Number(year) || date.getMonth() !== Number(month) - 1 || date.getDate() !== Number(day) || date > new Date()) return null;
+  return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+}
 type ProfilePage = "overview" | "personal" | "privacy" | "data" | "terms";
 const sections = [
   { id: "personal", title: "Personal information", description: "Your name and contact details", icon: UserRound },
@@ -25,9 +37,12 @@ export function MyProfile({ profile, onSave, scrollRef }: {
 }) {
   const [page, setPage] = useState<ProfilePage>("overview");
   const [draft, setDraft] = useState(profile);
+  const [birthDate, setBirthDate] = useState(() => birthDateParts(profile.dateOfBirth));
+  const [birthDateError, setBirthDateError] = useState("");
   const [saved, setSaved] = useState(false);
   const [confirmReset, setConfirmReset] = useState(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const birthDayRef = useRef<HTMLInputElement>(null);
   const resetRef = useRef<HTMLButtonElement>(null);
   const confirmationRef = useRef<HTMLDivElement>(null);
   const title = page === "overview" ? "My Profile" : sections.find(section => section.id === page)!.title;
@@ -45,7 +60,11 @@ export function MyProfile({ profile, onSave, scrollRef }: {
     setPage(next);
     setSaved(false);
     setConfirmReset(false);
-    if (next === "personal") setDraft(profile);
+    if (next === "personal") {
+      setDraft(profile);
+      setBirthDate(birthDateParts(profile.dateOfBirth));
+      setBirthDateError("");
+    }
   };
 
   return <div className="rehyn-panel rehyn-profile">
@@ -80,7 +99,14 @@ export function MyProfile({ profile, onSave, scrollRef }: {
 
     {page === "personal" && <form className="rehyn-profile-form" onSubmit={event => {
       event.preventDefault();
-      const next = { ...draft, name: draft.name.trim(), email: draft.email.trim() };
+      const dateOfBirth = birthDateValue(birthDate);
+      if (dateOfBirth === null) {
+        setBirthDateError("Enter a valid date of birth in the past using a day, month and four-digit year, or leave all three fields blank.");
+        setSaved(false);
+        birthDayRef.current?.focus();
+        return;
+      }
+      const next = { ...draft, name: draft.name.trim(), email: draft.email.trim(), dateOfBirth };
       if (!next.name) return;
       onSave(next);
       setDraft(next);
@@ -89,7 +115,20 @@ export function MyProfile({ profile, onSave, scrollRef }: {
       <p className="rehyn-profile-note">Use sample details here. Changes are saved for this visit only.</p>
       <label htmlFor="profile-name">Your name<input id="profile-name" name="name" value={draft.name} required maxLength={80} autoComplete="off" onChange={event => { setDraft({ ...draft, name: event.target.value }); setSaved(false); }} /></label>
       <label htmlFor="profile-email">Email <span>(optional)</span><input id="profile-email" name="email" type="email" value={draft.email} maxLength={254} autoComplete="off" placeholder="Not added" onChange={event => { setDraft({ ...draft, email: event.target.value }); setSaved(false); }} /></label>
-      <label htmlFor="profile-birth">Date of birth <span>(optional)</span><input id="profile-birth" name="dateOfBirth" type="date" value={draft.dateOfBirth} autoComplete="off" onChange={event => { setDraft({ ...draft, dateOfBirth: event.target.value }); setSaved(false); }} /></label>
+      <fieldset id="profile-birth" className="rehyn-birth-date" lang="en">
+        <legend>Date of birth <span>(optional)</span></legend>
+        <div className="rehyn-birth-fields">
+          {([{ key: "day", label: "Day", placeholder: "DD", length: 2 }, { key: "month", label: "Month", placeholder: "MM", length: 2 }, { key: "year", label: "Year", placeholder: "YYYY", length: 4 }] as const).map(field => <label key={field.key} htmlFor={`profile-birth-${field.key}`}>
+            {field.label}
+            <input id={`profile-birth-${field.key}`} ref={field.key === "day" ? birthDayRef : undefined} name={`birth-${field.key}`} type="text" inputMode="numeric" maxLength={field.length} autoComplete="off" placeholder={field.placeholder} value={birthDate[field.key]} aria-invalid={!!birthDateError} aria-describedby={birthDateError ? "profile-birth-error" : undefined} onChange={event => {
+              setBirthDate({ ...birthDate, [field.key]: event.target.value.replace(/\D/g, "") });
+              setBirthDateError("");
+              setSaved(false);
+            }} />
+          </label>)}
+        </div>
+        {birthDateError && <p id="profile-birth-error" className="rehyn-birth-error" role="alert">{birthDateError}</p>}
+      </fieldset>
       <Button type="submit" className="rehyn-action w-full" disabled={!draft.name.trim()}>Save changes</Button>
       <p className="rehyn-profile-saved" role="status">{saved ? "Your details are saved for this visit." : ""}</p>
     </form>}
