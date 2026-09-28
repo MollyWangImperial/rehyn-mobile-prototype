@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { Activity, Angry, ArrowLeft, ArrowRight, BookHeart, Check, ChevronRight, CircleAlert, Clock3, Frown, Hand, Heart, Home, Laugh, LockKeyhole, Meh, Mic, Pause, Play, Plus, Send, Smile, Sparkles, Volume2, Waves, X, type LucideIcon, ArrowLeftRight, ArrowUp, CalendarDays, ChartNoAxesColumn, ChevronsUp, CircleCheck, CircleDot, Coffee, Flag, MessageSquare, Share2, Star, Sunrise } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Settings, UserRound } from "lucide-react";
+import { UserRound } from "lucide-react";
 import { MyProfile, type Profile } from "@/components/my-profile";
 
 export const Route = createFileRoute("/")({
@@ -188,7 +188,6 @@ function Rehyn() {
         <div className="rehyn-home-topline">
           <p className="rehyn-eyebrow">{header[0]}</p>
           <span className="rehyn-home-date">Sun 27</span>
-          <Button variant="ghost" size="icon" className="rehyn-settings-trigger" aria-label="My Profile and settings" title="My Profile and settings" onClick={() => go("profile")}><Settings aria-hidden="true" /></Button>
         </div>
         <h1 className="rehyn-title">Good afternoon,<br />{greetingName}.</h1>
       </header> : page !== "profile" ? <header><p className="rehyn-eyebrow">{header[0]}</p><h1 className="rehyn-title">{header[1]}</h1></header> : null}

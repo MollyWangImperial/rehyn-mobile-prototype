@@ -94,12 +94,10 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px
 .rehyn-eyebrow { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; color: var(--primary); }
 .rehyn-title { font-family: var(--font-display); font-size: 31px; font-weight: 600; line-height: 1.1; margin: 8px 0 0; }
 .rehyn-home-header { container-type: inline-size; }
-.rehyn-home-topline { display: grid; grid-template-columns: minmax(0, 1fr) auto 44px; align-items: center; gap: 6px; }
+.rehyn-home-topline { display: grid; grid-template-columns: minmax(0, 1fr) auto; min-height: 44px; align-items: center; gap: 12px; }
 .rehyn-home-topline .rehyn-eyebrow { margin: 0; font-size: clamp(8px, 3.75cqi, 11px); white-space: nowrap; }
 .rehyn-home-date { color: var(--muted-foreground); font-size: clamp(10px, 4.2cqi, 12px); font-weight: 700; white-space: nowrap; }
 .rehyn-home-header .rehyn-title { margin-top: 20px; }
-.rehyn-settings-trigger { width: 44px; min-width: 44px; height: 44px; padding: 10px; border-radius: 10px; color: var(--primary); }
-.rehyn-settings-trigger svg { width: 24px; height: 24px; }
 .rehyn-profile-header .rehyn-title:focus { outline: none; }
 .rehyn-profile-back { min-height: 44px; padding: 0; margin: -6px 0 10px; color: var(--primary); }
 .rehyn-profile-card { display: flex; align-items: center; gap: 14px; padding: 14px; margin-top: 18px; background: var(--sage); border-radius: 16px; }
