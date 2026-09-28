@@ -148,6 +148,23 @@ button.rehyn-tap-feedback:active { opacity: .7; }
 .rehyn-screen .rehyn-alira-avatar > svg { width: 48%; height: 27%; }
 .rehyn-nav .rehyn-alira-avatar { width: 24px; height: 24px; }
 .rehyn-alira-avatar.rehyn-alira-intro-avatar { width: 64px; height: 64px; border-width: 4px; }
+/* A softly breathing companion, with the familiar heartbeat always visible. */
+.rehyn-alira-alive { position: relative; isolation: isolate; margin: 8px 0 4px 4px; border-color: #dae9df; background: radial-gradient(ellipse at 29% 20%, #81b69a 0%, #407d62 32%, #245d49 65%, #183f34 100%); box-shadow: inset 0 1px 3px #ffffff70, inset 0 -5px 9px #103d3640, 0 7px 16px #315f4e22; animation: rehyn-alira-float 4.8s ease-in-out infinite; }
+.rehyn-alira-alive::before { content: ""; position: absolute; z-index: -1; inset: -13px; border-radius: 50%; background: radial-gradient(circle, #99cbb270 30%, #badbc836 56%, transparent 72%); animation: rehyn-alira-glow 4.8s ease-in-out infinite; pointer-events: none; }
+.rehyn-alira-alive::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(115deg, transparent 32%, #ffffff05 42%, #fffde94d 49%, #ffffff05 56%, transparent 66%); background-size: 280% 100%; background-position: 140% 0; animation: rehyn-alira-shine 7s ease-in-out infinite; pointer-events: none; }
+.rehyn-screen .rehyn-alira-alive > svg { position: relative; z-index: 1; filter: drop-shadow(0 0 3px #d9ffe47a); animation: rehyn-alira-heartbeat 4.8s ease-in-out infinite; }
+.rehyn-alira-sparkle { position: absolute; width: 12px; height: 12px; top: -6px; right: -8px; background: #79a68c; clip-path: polygon(50% 0, 64% 36%, 100% 50%, 64% 64%, 50% 100%, 36% 64%, 0 50%, 36% 36%); opacity: .65; animation: rehyn-alira-twinkle 4.8s ease-in-out infinite; pointer-events: none; }
+.rehyn-alira-sparkle-small { width: 7px; height: 7px; top: auto; right: auto; bottom: 0; left: -9px; background: #a5b87d; animation-delay: -2.4s; }
+@keyframes rehyn-alira-float { 0%, 100% { transform: translateY(0) rotate(-1deg) scale(1); } 50% { transform: translateY(-3px) rotate(1deg) scale(1.035); } }
+@keyframes rehyn-alira-glow { 0%, 100% { opacity: .45; transform: scale(.94); } 50% { opacity: .85; transform: scale(1.08); } }
+@keyframes rehyn-alira-shine { 0%, 20% { background-position: 140% 0; opacity: 0; } 35% { opacity: .8; } 65%, 100% { background-position: -40% 0; opacity: 0; } }
+@keyframes rehyn-alira-heartbeat { 0%, 30%, 60%, 100% { transform: scale(1); } 40% { transform: scale(1.1); } 48% { transform: scale(1.02); } 53% { transform: scale(1.06); } }
+@keyframes rehyn-alira-twinkle { 0%, 100% { transform: scale(.75) rotate(-10deg); opacity: .3; } 50% { transform: scale(1) rotate(10deg); opacity: .8; } }
+@media (prefers-reduced-motion: reduce) {
+  .rehyn-alira-alive, .rehyn-alira-alive::before, .rehyn-alira-alive::after, .rehyn-alira-alive > * { animation: none !important; }
+  .rehyn-alira-alive::before { opacity: .5; }
+  .rehyn-alira-alive::after { background-position: 55% 0; opacity: .35; }
+}
 .rehyn-alira-card { container-type: inline-size; padding: 24px 20px; border-radius: 16px; background: color-mix(in oklab, var(--card) 88%, transparent); }
 .rehyn-alira-heading { display: flex; align-items: center; gap: 12px; }
 .rehyn-alira-heading h2 { flex: 1; min-width: 0; margin: 0; font-family: var(--font-display); font-size: clamp(21px, 10.5cqi, 30px); font-weight: 600; line-height: 1.14; letter-spacing: -.025em; }
